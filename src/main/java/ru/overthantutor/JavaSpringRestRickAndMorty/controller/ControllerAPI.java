@@ -11,6 +11,8 @@ import ru.overthantutor.JavaSpringRestRickAndMorty.domain.CharacterInfo;
 import ru.overthantutor.JavaSpringRestRickAndMorty.domain.Characters;
 import ru.overthantutor.JavaSpringRestRickAndMorty.service.ServiceApi;
 
+import java.util.Optional;
+
 /**
  * Spring Api controller
  */
@@ -27,8 +29,8 @@ public class ControllerAPI {
      */
     @GetMapping("/{page}")
     public ResponseEntity<Characters> getCharacters(@PathVariable("page") int page) {
-        Characters allCharacters = serviceApi.getAllCharacters(page);
-        return new ResponseEntity<>(allCharacters, HttpStatus.OK);
+        Optional<Characters> allCharacters = serviceApi.getAllCharacters(page);
+        return allCharacters.map(characters -> new ResponseEntity<>(characters, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_GATEWAY));
     }
 
     /**
