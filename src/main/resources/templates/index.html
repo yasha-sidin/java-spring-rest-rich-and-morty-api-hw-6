@@ -9,39 +9,63 @@
             width: 220px;
             margin: 0 auto;
         }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            margin-left: 60px;
+        }
+
+        .pages-control {
+            margin-top: 25px;
+            margin-bottom: 10px;
+            font-size: 150%;
+        }
+
+        .page-item {
+            font-style: oblique;
+        }
+
+        a { color: coral; }
     </style>
 </head>
 <body>
 <div class="pages-control">
-    <label for="pages">Choose page: </label>
+    <label for="pages" style="font-weight: bold">Choose page: </label>
     <select id="pages" onchange="window.location.href = this.options[this.selectedIndex].value">
-        <option th:each="page : ${#numbers.sequence(1, pagesNum)}" th:value="@{/rickandmorty/view/{page}(page=${page})}"
+        <option th:each="page : ${#numbers.sequence(1, pagesNum)}" class="page-item" th:value="@{/rickandmorty/view/{page}(page=${page})}"
                 th:text="${page}" th:selected="${page==pageCurrent}"></option>
     </select>
 </div>
 <section class="characters-control">
     <div class="characters">
-        <article th:each="character : ${characters}">
-            <div class="image">
-                <img th:src="${character.image}" th:alt="${character.name}">
-            </div>
-            <div class="info-about-character">
-                <div class="section">
-                    <a th:href="@{/rickandmorty/api/character/{id}(id=${character.id})}" rel="noopener noreferrer" target="_blank">
-                        <h2 th:text="${character.name}"></h2>
-                    </a>
-                    <span th:if="${character.status} == 'Alive'" th:text="${character.status}" class="badge text-white" style="background-color: forestgreen"></span>
-                    <span th:if="${character.status} == 'unknown'" th:text="Unknown" class="badge text-white" style="background-color: dimgray"></span>
-                    <span th:if="${character.status} == 'Dead'" th:text="${character.status}" class="badge text-white" style="background-color: firebrick"></span>
-                    <br>
-                    <b>Species: </b>
-                    <br>
-                    <p th:text="${character.species}"></p>
-                    <b>Last known location: </b>
-                    <p th:text="${character.characterInfo.location.name}"></p>
+        <div class="grid-container">
+            <article th:each="character : ${characters}">
+                <div class="image">
+                    <img th:src="${character.image}" th:alt="${character.name}">
                 </div>
-            </div>
-        </article>
+                <div class="info-about-character">
+                    <div class="section">
+                        <a th:href="@{/rickandmorty/api/character/{id}(id=${character.id})}" rel="noopener noreferrer"
+                           target="_blank">
+                            <h2 th:text="${character.name}"></h2>
+                        </a>
+                        <span th:if="${character.status} == 'Alive'" th:text="${character.status}"
+                              class="badge text-white" style="background-color: forestgreen"></span>
+                        <span th:if="${character.status} == 'unknown'" th:text="Unknown" class="badge text-white"
+                              style="background-color: dimgray"></span>
+                        <span th:if="${character.status} == 'Dead'" th:text="${character.status}"
+                              class="badge text-white" style="background-color: firebrick"></span>
+                        <br>
+                        <b>Species: </b>
+                        <br>
+                        <p th:text="${character.species}"></p>
+                        <b>Last known location: </b>
+                        <p th:text="${character.characterInfo.location.name}"></p>
+                    </div>
+                </div>
+            </article>
+        </div>
     </div>
 </section>
 </body>
